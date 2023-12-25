@@ -5,6 +5,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from joblib import parallel_backend
 from sklearn.ensemble import HistGradientBoostingClassifier
+import pandas as pd 
+from utils import timer
 
 def plot_bar_dic(my_dict):
     keys = list(my_dict.keys())
@@ -27,7 +29,7 @@ def med_bid_time(temp_bids):
         return np.median(np.array(temp_time_after-temp_time_before))
     else:
         return temp_time[0]
-
+@timer 
 def make_feature(train_data,bids_data):
     train_feature=pd.DataFrame()
     bid_per_auction_list=[]
@@ -54,7 +56,7 @@ def make_feature_speedup(train_data,bids_data):
     bids=bids_data.set_index(['bidder_id'])
     for ind,name in enumerate(train_data['bidder_id']):
         temp_bids=bids.loc[name]
-
+@timer 
 def train_classifier(feature_data):
     x=feature_data.drop(columns=['out'])
     x= preprocessing.normalize(x.values, axis=0)
@@ -66,7 +68,7 @@ def train_classifier(feature_data):
     score=clf.score(X_test, y_test)
     print(score)
     return clf
-
+@timer 
 def make_feature_test(test_data,bids_data):
     test_feature=pd.DataFrame()
     bid_per_auction_list=[]
@@ -88,7 +90,7 @@ def make_feature_test(test_data,bids_data):
     return test_feature
 
 def test_submission(test_data,bids_data,clf):
-    feature=make_feature_test(test_csv,bids_csv)
+    feature=make_feature_test(test_data,bids_data)
     with parallel_backend('threading', n_jobs=4):
         output=clf.predict(feature)
     return output
