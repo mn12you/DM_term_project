@@ -9,10 +9,11 @@ from joblib import dump, load
 def train(a:argparse.ArgumentParser)->None:
     model_path=config.MODEL_DIR/a.model
     input_data=utils.read_file(config.IN_DIR/a.dataset)
-    temp=my_algorithm.make_feature(input_data)
-    temp.to_csv("/database/feature.csv")
-    clf=my_algorithm.train_classifier(temp)
-    dump(clf,model_path)
+    my_algorithm.make_feature(input_data)
+    # temp=my_algorithm.make_feature(input_data)
+    # temp.to_csv("/database/feature.csv")
+    # clf=my_algorithm.train_classifier(temp)
+    # dump(clf,model_path)
 def test(a:argparse.ArgumentParser,model_path:Path)->None:
     sub=pd.DataFrame()
     clf=load(model_path)
