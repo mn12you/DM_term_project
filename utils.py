@@ -26,9 +26,8 @@ def read_file(filename: Union[str, Path]) -> Tuple[pd.DataFrame,pd.DataFrame]:
        pd.DataFrame: The data in the file
     """
     temp_data=pd.read_csv(filename)
-    bid_temp=pd.read_csv(config.IN_DIR/"bids.csv.zip")
 
-    return temp_data,bid_temp
+    return temp_data
 
 def write_file(output:pd.DataFrame,filename:Union[str,Path]) -> None:
     """write_file writes the data to a txt file 

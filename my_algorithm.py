@@ -7,6 +7,9 @@ from joblib import parallel_backend
 from sklearn.ensemble import HistGradientBoostingClassifier
 import pandas as pd 
 from utils import timer
+import numpy as np
+import config
+bids_data=pd.read_csv(config.IN_DIR/"bids.csv.zip")
 
 def plot_bar_dic(my_dict):
     keys = list(my_dict.keys())
@@ -30,7 +33,7 @@ def med_bid_time(temp_bids):
     else:
         return temp_time[0]
 @timer 
-def make_feature(train_data,bids_data):
+def make_feature(train_data)->pd.DataFrame:
     train_feature=pd.DataFrame()
     bid_per_auction_list=[]
     med_bid_time_list=[]
@@ -47,15 +50,17 @@ def make_feature(train_data,bids_data):
     train_feature['out']=label
             
     return train_feature
-
-def make_feature_speedup(train_data,bids_data):
+    
+@timer 
+def make_feature_speedup(train_data):
     train_feature=pd.DataFrame()
     bid_per_auction_list=[]
     med_bid_time_list=[]
     label=[]
-    bids=bids_data.set_index(['bidder_id'])
-    for ind,name in enumerate(train_data['bidder_id']):
-        temp_bids=bids.loc[name]
+
+    # bids=bids_data.set_index(['bidder_id'])
+    # for ind,name in enumerate(train_data['bidder_id']):
+    #     temp_bids=bids.loc[name]
 @timer 
 def train_classifier(feature_data):
     x=feature_data.drop(columns=['out'])
@@ -66,10 +71,10 @@ def train_classifier(feature_data):
     clf=HistGradientBoostingClassifier(max_iter=100).fit(X_train, y_train)
     clf.fit(X_train, y_train)
     score=clf.score(X_test, y_test)
-    print(score)
+    print("Classifier score: ", score)
     return clf
 @timer 
-def make_feature_test(test_data,bids_data):
+def make_feature_test(test_data)->pd.DataFrame:
     test_feature=pd.DataFrame()
     bid_per_auction_list=[]
     med_bid_time_list=[]
@@ -89,9 +94,17 @@ def make_feature_test(test_data,bids_data):
             
     return test_feature
 
-def test_submission(test_data,bids_data,clf):
+def test_submission(test_data,clf):
     feature=make_feature_test(test_data,bids_data)
     with parallel_backend('threading', n_jobs=4):
         output=clf.predict(feature)
     return output
-   
+def bid_perauction_speedup2(dataframe_temp,series_temp):
+    if dataframe_temp['bidder_id']==series_temp['bidder_id']:
+        auc_counter=Counter(temp_bids['auction'])
+    CC=np.array(list(auc_counter.values()))
+
+def  bid_per_auction_speedup(series_temp):
+    bids_data.apply(bid_perauction_speedup2(series_temp=series_temp))
+    if series_temp.loc['bidder']==
+

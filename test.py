@@ -1,0 +1,1 @@
+lineitem_df = %sql SELECT * FROM 'lineitemsf1.snappy.parquet'
