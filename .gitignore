@@ -1,4 +1,2 @@
-/bids.csv.zip
-/sampleSubmission.csv
-/train.csv.zip
-/test.csv.zip
+/database/*
+!/database/.gitkeep
