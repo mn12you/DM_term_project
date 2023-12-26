@@ -36,4 +36,4 @@ def write_file(output:pd.DataFrame,filename:Union[str,Path]) -> None:
         output (pd.DataFrame): The data to write to the file
         filename (Union[str, Path]): The filename to write to
     """
-    output.to_csv(filename)
+    output.to_csv(filename,index=None)
