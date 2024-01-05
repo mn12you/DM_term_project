@@ -22,7 +22,7 @@ def test(a:argparse.ArgumentParser,model_path:Path)->None:
     with parallel_backend('threading', n_jobs=4):
         output=clf.predict(temp)
     sub['bidder_id']=input_data['bidder_id']
-    sub['predict']=output
+    sub['prediction']=output
     
     utils.write_file(sub,config.OUT_DIR/a.output)
 
